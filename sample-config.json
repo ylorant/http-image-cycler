@@ -1,8 +1,11 @@
 {
-    "input": "input.txt",
+    "input": {
+        "file1": "input.txt"
+    },
     "time": 1,
     "output": [
         {
+            "input": "file1",
             "basepath": "output",
             "file": "output-1.png",
             "mapping": "test-mapping",

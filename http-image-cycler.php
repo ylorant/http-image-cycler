@@ -28,31 +28,38 @@ $previousContents = null;
 $currentValues = [];
 
 while (true) {
-    $contents = file_get_contents($config['input']);
-    $now = new DateTimeImmutable();
 
-    if($contents != $previousContents) {
-        echo "Updating target files...\n";
-        $previousContents = $contents;
-        
-        foreach($config['output'] as $output) {
-            $found = false;
-
-            foreach($config['mappings'][$output['mapping']] as $file => $value) {
-                if(strpos($contents, $value) === 0) {
-                    if(!is_dir($output['basepath'])) {
-                        mkdir($output['basepath'], 0777, true);
-                    }
-
-                    echo "Updating ". $output['basepath']. DS . $output['file']. "...\n";
-                    copy($output['basepath']. DS . $file, $output['basepath']. DS . $output['file']);
-                    $found = true;
-                    break;
+    foreach($config['input'] as $inputId => $inputConfig) {
+        $contents = file_get_contents($config['input']);
+        $now = new DateTimeImmutable();
+    
+        if($contents != $previousContents[$inputId]) {
+            echo "Updating target files...\n";
+            $previousContents = $contents;
+            
+            foreach($config['output'] as $output) {
+                if($output['input'] != $inputId) {
+                    continue;
                 }
-            }
 
-            if(!$found && !empty($output['default'])) {
-                copy($output['basepath']. DS . $output['default'], $output['basepath']. DS . $output['file']);
+                $found = false;
+    
+                foreach($config['mappings'][$output['mapping']] as $file => $value) {
+                    if(strpos($contents, $value) === 0) {
+                        if(!is_dir($output['basepath'])) {
+                            mkdir($output['basepath'], 0777, true);
+                        }
+    
+                        echo "Updating ". $output['basepath']. DS . $output['file']. "...\n";
+                        copy($output['basepath']. DS . $file, $output['basepath']. DS . $output['file']);
+                        $found = true;
+                        break;
+                    }
+                }
+    
+                if(!$found && !empty($output['default'])) {
+                    copy($output['basepath']. DS . $output['default'], $output['basepath']. DS . $output['file']);
+                }
             }
         }
     }
