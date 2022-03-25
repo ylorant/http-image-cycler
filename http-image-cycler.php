@@ -24,18 +24,18 @@ if(empty($config)) {
     die("Invalid config.\n");
 }
 
-$previousContents = null;
+$previousContents = [];
 $currentValues = [];
 
 while (true) {
 
-    foreach($config['input'] as $inputId => $inputConfig) {
-        $contents = file_get_contents($config['input']);
+    foreach($config['input'] as $inputId => $inputFile) {
+        $contents = file_get_contents($inputFile);
         $now = new DateTimeImmutable();
     
-        if($contents != $previousContents[$inputId]) {
+        if(!isset($previousContents[$inputId]) || $contents != $previousContents[$inputId]) {
             echo "Updating target files...\n";
-            $previousContents = $contents;
+            $previousContents[$inputId] = $contents;
             
             foreach($config['output'] as $output) {
                 if($output['input'] != $inputId) {
