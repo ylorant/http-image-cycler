@@ -44,7 +44,7 @@ while (true) {
 
                 $found = false;
     
-                foreach($config['mappings'][$output['mapping']] as $file => $value) {
+                foreach($config['mappings'][$output['mapping']] as $value => $file) {
                     if(strpos($contents, $value) === 0) {
                         if(!is_dir($output['basepath'])) {
                             mkdir($output['basepath'], 0777, true);

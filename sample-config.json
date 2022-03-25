@@ -14,8 +14,8 @@
     ],
     "mappings": {
         "test-mapping": {
-            "input-1.png": "value 1",
-            "input-2.png": "value 2"
+            "value 1": "input-1.png",
+            "value 2": "input-2.png"
         }
     }
 }
