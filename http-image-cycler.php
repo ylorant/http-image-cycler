@@ -36,6 +36,8 @@ while (true) {
         $previousContents = $contents;
         
         foreach($config['output'] as $output) {
+            $found = false;
+
             foreach($config['mappings'][$output['mapping']] as $file => $value) {
                 if(strpos($contents, $value) === 0) {
                     if(!is_dir($output['basepath'])) {
@@ -44,8 +46,13 @@ while (true) {
 
                     echo "Updating ". $output['basepath']. DS . $output['file']. "...\n";
                     copy($output['basepath']. DS . $file, $output['basepath']. DS . $output['file']);
+                    $found = true;
                     break;
                 }
+            }
+
+            if(!$found && !empty($output['default'])) {
+                copy($output['basepath']. DS . $output['default'], $output['basepath']. DS . $output['file']);
             }
         }
     }

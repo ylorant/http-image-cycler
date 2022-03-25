@@ -5,7 +5,8 @@
         {
             "basepath": "output",
             "file": "output-1.png",
-            "mapping": "test-mapping"
+            "mapping": "test-mapping",
+            "default": "default.png"
         }
     ],
     "mappings": {
